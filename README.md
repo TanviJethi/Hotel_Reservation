@@ -2,7 +2,7 @@ python app.py# Hotel Reservation System (MySQL DBMS Project)
 
 **Tech Stack:** MySQL 8.0.16+ (InnoDB) + Python 3 CLI (`mysql-connector-python`)
 
-## Folder layout
+## Folder Layout
 ```
 hotel_dbms/
 ├── docs/
