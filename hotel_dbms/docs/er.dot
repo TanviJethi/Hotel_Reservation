@@ -1,0 +1,50 @@
+digraph ER {
+  graph [rankdir=LR, splines=true, nodesep=0.5, ranksep=1.1, fontname="Helvetica", bgcolor="white", pad=0.3];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=10, arrowhead=crow, arrowtail=tee, dir=both, color="#34495e"];
+
+  guests [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>GUESTS</b></font></td></tr>
+    <tr><td align="left"><u>guest_id</u> (PK)<br align="left"/>first_name, last_name<br align="left"/>email (UQ), phone<br align="left"/>address, city<br align="left"/>id_proof_type, id_proof_no<br align="left"/>created_at<br align="left"/></td></tr></table>>];
+
+  room_types [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>ROOM_TYPES</b></font></td></tr>
+    <tr><td align="left"><u>type_id</u> (PK)<br align="left"/>type_name (UQ)<br align="left"/>description<br align="left"/>base_price<br align="left"/>max_occupancy<br align="left"/></td></tr></table>>];
+
+  rooms [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>ROOMS</b></font></td></tr>
+    <tr><td align="left"><u>room_id</u> (PK)<br align="left"/>room_number (UQ)<br align="left"/>type_id (FK)<br align="left"/>floor_no<br align="left"/>status<br align="left"/></td></tr></table>>];
+
+  staff [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>STAFF</b></font></td></tr>
+    <tr><td align="left"><u>staff_id</u> (PK)<br align="left"/>full_name, role<br align="left"/>email (UQ), phone<br align="left"/>hire_date, salary<br align="left"/></td></tr></table>>];
+
+  reservations [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#c0392b"><font color="white"><b>RESERVATIONS</b></font></td></tr>
+    <tr><td align="left"><u>reservation_id</u> (PK)<br align="left"/>guest_id (FK)<br align="left"/>room_id (FK)<br align="left"/>staff_id (FK)<br align="left"/>check_in_date, check_out_date<br align="left"/>num_guests, status<br align="left"/>total_amount<br align="left"/>actual_check_in / _out<br align="left"/>created_at<br align="left"/></td></tr></table>>];
+
+  services [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>SERVICES</b></font></td></tr>
+    <tr><td align="left"><u>service_id</u> (PK)<br align="left"/>service_name (UQ)<br align="left"/>price<br align="left"/></td></tr></table>>];
+
+  reservation_services [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#7d3c98"><font color="white"><b>RESERVATION_SERVICES</b></font></td></tr>
+    <tr><td align="left"><u>rs_id</u> (PK)<br align="left"/>reservation_id (FK)<br align="left"/>service_id (FK)<br align="left"/>quantity, unit_price<br align="left"/>service_date<br align="left"/></td></tr></table>>];
+
+  payments [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>PAYMENTS</b></font></td></tr>
+    <tr><td align="left"><u>payment_id</u> (PK)<br align="left"/>reservation_id (FK)<br align="left"/>amount, method<br align="left"/>payment_date<br align="left"/></td></tr></table>>];
+
+  reviews [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1f4e79"><font color="white"><b>REVIEWS</b></font></td></tr>
+    <tr><td align="left"><u>review_id</u> (PK)<br align="left"/>reservation_id (FK, UQ)<br align="left"/>rating, comments<br align="left"/>review_date<br align="left"/></td></tr></table>>];
+
+  guests       -> reservations [taillabel="1", headlabel="N", label=" makes "];
+  rooms        -> reservations [taillabel="1", headlabel="N", label=" is booked in "];
+  staff        -> reservations [taillabel="1", headlabel="N", label=" handles "];
+  room_types   -> rooms        [taillabel="1", headlabel="N", label=" classifies "];
+  reservations -> reservation_services [taillabel="1", headlabel="N", label=" consumes "];
+  services     -> reservation_services [taillabel="1", headlabel="N", label=" is used in "];
+  reservations -> payments     [taillabel="1", headlabel="N", label=" is settled by "];
+  reservations -> reviews      [taillabel="1", headlabel="1", label=" receives ", arrowhead=tee];
+}
